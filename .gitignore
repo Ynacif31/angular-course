@@ -40,3 +40,14 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+/node_modules
+/.angular
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+.angular.json
+.package-lock.json
+.package.json
