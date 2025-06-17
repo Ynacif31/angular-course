@@ -1,11 +1,48 @@
 <mat-card>
-    <mat-form-field>
-        <mat-label>Título</mat-label>
-        <input matInput placeholder="Digite o título" [(ngModel)]="enteredTitle">
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Conteúdo</mat-label>
-        <textarea matInput rows="6" placeholder="Digite o conteúdo" [(ngModel)]="enteredContent"></textarea>
-    </mat-form-field>
-    <button mat-raised-button color="accent" (click)="onAddPost()">Adicionar Post</button>
+    <form (submit)="onAddPost(postForm)" #postForm="ngForm">
+        <mat-form-field>
+            <mat-label>Título</mat-label>
+            <input 
+                matInput 
+                placeholder="Digite o título" 
+                name="title"
+                ngModel
+                required
+                minlength="3"
+                #title="ngModel">
+            <mat-error *ngIf="title.errors?.['required']">
+                O título é obrigatório
+            </mat-error>
+            <mat-error *ngIf="title.errors?.['minlength']">
+                O título deve ter pelo menos 3 caracteres
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Conteúdo</mat-label>
+            <textarea
+                matInput 
+                rows="6" 
+                placeholder="Digite o conteúdo" 
+                name="content"
+                ngModel
+                required
+                minlength="3"
+                #content="ngModel">
+            </textarea>
+            <mat-error *ngIf="content.errors?.['required']">
+                O conteúdo é obrigatório
+            </mat-error>
+            <mat-error *ngIf="content.errors?.['minlength']">
+                O conteúdo deve ter pelo menos 3 caracteres
+            </mat-error>
+        </mat-form-field>
+
+        <button 
+            mat-raised-button 
+            color="accent" 
+            type="submit">
+            Adicionar Post
+        </button>
+    </form>
 </mat-card>

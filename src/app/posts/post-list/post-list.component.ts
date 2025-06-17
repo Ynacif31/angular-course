@@ -1,11 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CommonModule } from '@angular/common';
-
-export interface Post {
-  title: string;
-  content: string;
-}
+import { Post } from '../post.model';
 
 @Component({
     selector: 'app-post-list',

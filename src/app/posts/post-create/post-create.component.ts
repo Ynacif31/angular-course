@@ -4,11 +4,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-interface Post {
-  title: string;
-  content: string;
-}
+import { Post } from '../post.model';
+import { NgForm } from "@angular/forms";
 
 @Component({
     selector: 'app-post-create',
@@ -29,13 +26,14 @@ export class PostCreateComponent {
 
     @Output() postCreated = new EventEmitter<Post>();
     
-    onAddPost(): void {
+    onAddPost(form: NgForm): void {
+        if (form.invalid) {
+            return;
+        }
         const post: Post = {
-            title: this.enteredTitle,
-            content: this.enteredContent
+            title: form.value.title,
+            content: form.value.content
         };
         this.postCreated.emit(post);
-        this.enteredTitle = '';
-        this.enteredContent = '';
     }
 }
