@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
@@ -12,6 +13,7 @@ import { Subscription } from 'rxjs';
     standalone: true,
     imports: [
         MatExpansionModule,
+        MatButtonModule,
         CommonModule
     ]
 })
