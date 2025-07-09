@@ -21,10 +21,10 @@ app.post('/api/posts', (req, res, next) => {
         message: 'Post added successfully',
         post: post
     })
-
+    next();
 });
 
-app.use('/api/posts', (req, res, next) => {
+app.get('/api/posts', (req, res, next) => {
     const post = [
         {
             id: '1',
