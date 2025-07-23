@@ -1,10 +1,27 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');  
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const Post = require('./models/post');
 
 const app = express();
+
+const mongoUsername = process.env.MONGODB_USERNAME;
+const mongoPassword = process.env.MONGODB_PASSWORD;
+const mongoCluster = process.env.MONGODB_CLUSTER;
+const mongoDatabase = process.env.MONGODB_DATABASE;
+
+const mongoUri = `mongodb+srv://${mongoUsername}:${encodeURIComponent(mongoPassword)}@${mongoCluster}/${mongoDatabase}?retryWrites=true&w=majority&appName=Cluster0`;
+
+mongoose.connect(mongoUri)
+.then(() => {
+    console.log('Connected to database');
+})
+.catch((error) => {
+    console.log('Connection failed:', error.message);
+});
 
 app.use(bodyParser.json());
 
@@ -15,34 +32,41 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
     next();
-})
+});
 
 app.post('/api/posts', (req, res, next) => {
-    const post = req.body;
-    console.log(post);
-    res.status(201).json({
-        message: 'Post added successfully',
-        post: post
+    const post = new Post({
+        title: req.body.title,
+        content: req.body.content
+    });
+    post.save()
+    .then(createdPost => {
+        res.status(201).json({
+            message: 'Post added successfully',
+            post: createdPost
+        });
     })
-    next();
+    .catch(error => {
+        res.status(500).json({
+            message: 'Error creating post',
+            error: error.message
+        });
+    });
 });
 
 app.get('/api/posts', (req, res, next) => {
-    const post = [
-        {
-            id: '1',
-            title: 'First Post',
-            content: 'This is the first post'
-        },
-        {
-            id: '2',
-            title: 'Second Post',
-            content: 'This is the second post'
-        }
-    ];
-    res.status(200).json({
-        message: 'Posts fetched successfully',
-        posts: post
+    Post.find()
+    .then(documents => {
+        res.status(200).json({
+            message: 'Posts fetched successfully',
+            posts: documents
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            message: 'Error fetching posts',
+            error: error.message
+        });
     });
 });
 
