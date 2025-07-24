@@ -70,4 +70,25 @@ app.get('/api/posts', (req, res, next) => {
     });
 });
 
+app.delete('/api/posts/:id', (req, res, next) => {
+    if (!req.params.id) {
+        return res.status(400).json({
+            message: 'Post id is required'
+        });
+    }
+
+    Post.deleteOne({_id: req.params.id})
+    .then(result => {
+        res.status(200).json({
+            message: 'Post deleted successfully'
+        })
+    })
+    .catch(error => {
+        res.status(500).json({
+            message: 'Error deleting post',
+            error: error.message
+        })
+    })
+})
+
 module.exports = app;

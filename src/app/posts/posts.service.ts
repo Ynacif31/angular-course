@@ -4,6 +4,12 @@ import { Post } from "./post.model";
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
+interface PostResponse {
+    _id: string;
+    title: string;
+    content: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -18,14 +24,14 @@ export class PostsService {
     }
 
     getPosts() {
-       this.http.get<{message: string, posts: Post[]}>('http://localhost:3000/api/posts')
+       this.http.get<{message: string, posts: PostResponse[]}>('http://localhost:3000/api/posts')
        .pipe(map(
         (postData) => {
             return postData.posts.map(post => {
                 return {
                     title: post.title,
                     content: post.content,
-                    id: post.id
+                    id: post._id
                 };
             });
         }
@@ -44,5 +50,9 @@ export class PostsService {
             this.posts.push(post);
             this.postsUpdated.next([...this.posts]);
         });
+    }
+
+    deletePost(postId: string) {
+        return this.http.delete(`http://localhost:3000/api/posts/${postId}`);
     }
 }
