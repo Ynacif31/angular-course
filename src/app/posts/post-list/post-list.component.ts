@@ -42,7 +42,7 @@ export class PostListComponent implements OnInit, OnDestroy {
 
         this.postsService.deletePost(postId)
         .subscribe(() => {
-            this.postsService.getPosts();
+            // Lista atualizada automaticamente pelo serviço
         }, (error) => {
             console.log(error.error.message);
         });

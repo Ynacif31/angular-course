@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Post } from "./post.model";
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 interface PostResponse {
     _id: string;
@@ -46,13 +46,21 @@ export class PostsService {
         const post: Post = { id: '', title, content };
         this.http.post<{message: string, postId: string}>('http://localhost:3000/api/posts', post)
         .subscribe((responseData) => {
-            console.log(responseData.message);
+            const id = responseData.postId;
+            post.id = id;
             this.posts.push(post);
             this.postsUpdated.next([...this.posts]);
         });
     }
 
     deletePost(postId: string) {
-        return this.http.delete(`http://localhost:3000/api/posts/${postId}`);
+        return this.http.delete(`http://localhost:3000/api/posts/${postId}`)
+        .pipe(
+            tap(() => {
+                const updatedPosts = this.posts.filter(post => post.id !== postId);
+                this.posts = updatedPosts;
+                this.postsUpdated.next([...this.posts]);
+            })
+        );
     }
 }

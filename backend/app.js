@@ -43,7 +43,7 @@ app.post('/api/posts', (req, res, next) => {
     .then(createdPost => {
         res.status(201).json({
             message: 'Post added successfully',
-            post: createdPost
+            postId: createdPost._id
         });
     })
     .catch(error => {
