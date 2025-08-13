@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
 import { Subscription } from 'rxjs';
@@ -14,7 +15,8 @@ import { Subscription } from 'rxjs';
     imports: [
         MatExpansionModule,
         MatButtonModule,
-        CommonModule
+        CommonModule,
+        RouterModule
     ]
 })
 export class PostListComponent implements OnInit, OnDestroy {

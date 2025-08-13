@@ -42,6 +42,11 @@ export class PostsService {
        });
     }
 
+    getPost(id: string): Post | null {
+        const post = this.posts.find(p => p.id === id);
+        return post ? {...post} : null;
+    }
+
     addPost(title: string, content: string) {
         const post: Post = { id: '', title, content };
         this.http.post<{message: string, postId: string}>('http://localhost:3000/api/posts', post)
