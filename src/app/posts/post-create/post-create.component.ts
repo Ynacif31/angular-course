@@ -40,11 +40,13 @@ export class PostCreateComponent implements OnInit {
                 this.mode = 'edit';
                 this.postId = paramMap.get('postId');
                 if (this.postId) {
-                    this.post = this.postsService.getPost(this.postId);
-                    if (this.post) {
-                        this.enteredTitle = this.post.title;
-                        this.enteredContent = this.post.content;
-                    }
+                    this.postsService.getPost(this.postId).subscribe((post: Post | null) => {
+                        if (post) {
+                            this.post = post;
+                            this.enteredTitle = post.title;
+                            this.enteredContent = post.content;
+                        }
+                    });
                 }
             } else {
                 this.mode = 'create';

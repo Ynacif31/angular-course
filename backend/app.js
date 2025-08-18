@@ -34,6 +34,16 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get("/api/posts/:id", (req, res, next) => {
+    Post.findById(req.params.id).then(post => {
+        if (post) {
+            res.status(200).json(post);
+        } else {
+            res.status(404).json({ message: 'Post not found' });
+        }
+    });
+});
+
 app.post('/api/posts', (req, res, next) => {
     const post = new Post({
         title: req.body.title,
