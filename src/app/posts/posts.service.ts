@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { Post } from "./post.model";
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
+import { response } from 'express';
 
 interface PostResponse {
     _id: string;
@@ -55,6 +56,15 @@ export class PostsService {
             post.id = id;
             this.posts.push(post);
             this.postsUpdated.next([...this.posts]);
+        });
+    }
+
+    updatePost(id: string, title: string, content: string) {
+        const post: Post = { id: id, title: title, content: content };
+        this.http
+        .put("http://localhost:3000/api/posts/" + id, post)
+        .subscribe(response => {
+            console.log(response);
         });
     }
 
