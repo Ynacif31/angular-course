@@ -59,14 +59,14 @@ export class PostsService {
 
     addPost(title: string, content: string) {
         const post: Post = { id: '', title, content };
-        this.http.post<{message: string, postId: string}>('http://localhost:3000/api/posts', post)
-        .subscribe((responseData) => {
-            const id = responseData.postId;
-            post.id = id;
-            this.posts.push(post);
-            this.postsUpdated.next([...this.posts]);
-            this.router.navigate(['/']);
-        });
+        this.http.post<{ message: string, postId: string }>('http://localhost:3000/api/posts', post)
+            .subscribe((responseData) => {
+                const id = responseData.postId;
+                post.id = id;
+                this.posts.push(post);
+                this.postsUpdated.next([...this.posts]);
+                this.router.navigate(['/']); // Isso faz a página mudar, "resolvendo" o problema
+            });
     }
 
     updatePost(id: string, title: string, content: string) {
