@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
 import { Subscription } from 'rxjs';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
     selector: 'app-post-list',
@@ -13,22 +14,26 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./post-list.component.css'],
     standalone: true,
     imports: [
-        MatExpansionModule,
-        MatButtonModule,
-        CommonModule,
-        RouterModule
-    ]
+    MatExpansionModule,
+    MatButtonModule,
+    CommonModule,
+    RouterModule,
+    MatProgressSpinnerModule
+]
 })
 export class PostListComponent implements OnInit, OnDestroy {
     posts: Post[] = [];
+    isLoading = false;
     private postsSub: Subscription = new Subscription();
     constructor(public postsService: PostsService) {}
 
     ngOnInit(): void {
+        this.isLoading = true;
         this.postsService.getPosts();
         this.postsSub = this.postsService.getPostsUpdatedListener()
             .subscribe((posts: Post[]) => {
                 this.posts = posts;
+                this.isLoading = false;
             });
     }
 

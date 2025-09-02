@@ -9,6 +9,7 @@ import { Post } from '../post.model';
 import { NgForm } from "@angular/forms";
 import { PostsService } from '../posts.service';
 import { ActivatedRoute, ParamMap } from "@angular/router";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
     selector: 'app-post-create',
@@ -16,17 +17,19 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
     styleUrls: ['./post-create.component.css'],
     standalone: true,
     imports: [
-        FormsModule,
-        MatInputModule,
-        MatCardModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        CommonModule
-    ]
+    FormsModule,
+    MatInputModule,
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    CommonModule,
+    MatProgressSpinnerModule
+]
 })
 export class PostCreateComponent implements OnInit {
     enteredContent = '';
     enteredTitle = '';
+    isLoading = false;
     private mode = 'create';
     private postId: string | null = null;
     private post: Post | null = null;
@@ -39,8 +42,10 @@ export class PostCreateComponent implements OnInit {
             if (paramMap.has('postId')) {
                 this.mode = 'edit';
                 this.postId = paramMap.get('postId');
+                this.isLoading = true;
                 if (this.postId) {
                     this.postsService.getPost(this.postId).subscribe((post: Post | null) => {
+                        this.isLoading = false;
                         if (post) {
                             this.post = post;
                             this.enteredTitle = post.title;
@@ -59,6 +64,7 @@ export class PostCreateComponent implements OnInit {
         if (form.invalid) {
             return;
         }
+        this.isLoading = true;
         if (this.mode === "create") {
             this.postsService.addPost(form.value.title, form.value.content);
         } else if (this.postId) {

@@ -9,6 +9,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { HttpClientModule } from '@angular/common/http';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -36,6 +37,7 @@ import { HeaderComponent } from './header/header.component';
     PostCreateComponent,
     HeaderComponent,
     PostListComponent,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
