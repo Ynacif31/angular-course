@@ -5,6 +5,7 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const Post = require('./models/post');
+const postsRoutes = require('./routes/posts');
 
 const app = express();
 
@@ -34,91 +35,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/api/posts/:id", (req, res, next) => {
-    Post.findById(req.params.id).then(post => {
-        if (post) {
-            res.status(200).json(post);
-        } else {
-            res.status(404).json({ message: 'Post not found' });
-        }
-    });
-});
-
-app.post('/api/posts', (req, res, next) => {
-    const post = new Post({
-        title: req.body.title,
-        content: req.body.content
-    });
-    post.save()
-    .then(createdPost => {
-        res.status(201).json({
-            message: 'Post added successfully',
-            postId: createdPost._id
-        });
-    })
-    .catch(error => {
-        res.status(500).json({
-            message: 'Error creating post',
-            error: error.message
-        });
-    });
-});
-
-app.get('/api/posts', (req, res, next) => {
-    Post.find()
-    .then(documents => {
-        res.status(200).json({
-            message: 'Posts fetched successfully',
-            posts: documents
-        });
-    })
-    .catch(error => {
-        res.status(500).json({
-            message: 'Error fetching posts',
-            error: error.message
-        });
-    });
-});
-
-app.put("/api/posts/:id", (req, res, next) => {
-    const post = new Post({
-        _id: req.body.id,
-        title: req.body.title,
-        content: req.body.content
-    });
-    Post.updateOne({_id: req.params.id}, post).then(result => {
-        console.log(result);
-        res.status(200).json({
-            message: 'Post updated successfully'
-        });
-    })
-    .catch(error => {
-        res.status(500).json({
-            message: 'Error updating post',
-            error: error.message
-        });
-    });
-});
-
-app.delete('/api/posts/:id', (req, res, next) => {
-    if (!req.params.id) {
-        return res.status(400).json({
-            message: 'Post id is required'
-        });
-    }
-
-    Post.deleteOne({_id: req.params.id})
-    .then(result => {
-        res.status(200).json({
-            message: 'Post deleted successfully'
-        })
-    })
-    .catch(error => {
-        res.status(500).json({
-            message: 'Error deleting post',
-            error: error.message
-        })
-    })
-})
+app.use('/api/posts', postsRoutes);
 
 module.exports = app;
